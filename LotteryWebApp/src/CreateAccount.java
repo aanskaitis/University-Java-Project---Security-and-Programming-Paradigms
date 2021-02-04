@@ -27,10 +27,10 @@ public class CreateAccount extends HttpServlet {
         // (NOTE: please change to option 1 when submitting)
 
         // 1. use this when running everything in Docker using docker-compose
-        //String DB_URL = "jdbc:mysql://db:3306/lottery";
+        String DB_URL = "jdbc:mysql://db:3306/lottery";
 
         // 2. use this when running tomcat server locally on your machine and mysql database server in Docker
-        String DB_URL = "jdbc:mysql://localhost:33333/lottery";
+        //String DB_URL = "jdbc:mysql://localhost:33333/lottery";
 
         // 3. use this when running tomcat and mysql database servers on your machine
         //String DB_URL = "jdbc:mysql://localhost:3306/lottery";
@@ -42,6 +42,7 @@ public class CreateAccount extends HttpServlet {
         String phone = request.getParameter("phone");
         String username = request.getParameter("username");
         String password = request.getParameter("password");
+        String role = request.getParameter("role");
         String hashed_password = HashPassword(password);
 
         HttpSession session = request.getSession();
@@ -51,6 +52,7 @@ public class CreateAccount extends HttpServlet {
         session.setAttribute("phone", phone);
         session.setAttribute("username", username);
         session.setAttribute("password", hashed_password);
+        session.setAttribute("role", role);
 
         try{
             // create database connection and statement
@@ -58,8 +60,8 @@ public class CreateAccount extends HttpServlet {
             conn = DriverManager.getConnection(DB_URL,USER,PASS);
 
             // Create sql query
-            String query = "INSERT INTO userAccounts (Firstname, Lastname, Email, Phone, Username, Pwd)"
-                    + " VALUES (?, ?, ?, ?, ?, ?)";
+            String query = "INSERT INTO userAccounts (Firstname, Lastname, Email, Phone, Username, Pwd, Userrole)"
+                    + " VALUES (?, ?, ?, ?, ?, ?, ?)";
 
 
             // set values into SQL query statement
@@ -70,13 +72,14 @@ public class CreateAccount extends HttpServlet {
             stmt.setString(4,phone);
             stmt.setString(5,username);
             stmt.setString(6,hashed_password);
+            stmt.setString(7,role);
 
             // execute query and close connection
             stmt.execute();
             conn.close();
 
-            // display account.jsp page with given message if successful
-            RequestDispatcher dispatcher = request.getRequestDispatcher("/account.jsp");
+            // display index.jsp page with given message if successful
+            RequestDispatcher dispatcher = request.getRequestDispatcher("/index.jsp");
             request.setAttribute("message", firstname+", you have successfully created an account");
             dispatcher.forward(request, response);
 
@@ -84,7 +87,7 @@ public class CreateAccount extends HttpServlet {
             se.printStackTrace();
             // display error.jsp page with given message if unsuccessful
             RequestDispatcher dispatcher = request.getRequestDispatcher("/error.jsp");
-            request.setAttribute("message", firstname+", this username/password combination already exists. Please try again");
+            request.setAttribute("message", "This username/password combination already exists. Please try again");
             dispatcher.forward(request, response);
         }
         finally{

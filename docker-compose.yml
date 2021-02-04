@@ -25,5 +25,6 @@ web:
     volumes:
         - ./tomcat/webapps/ROOT/index.jsp:/usr/local/tomcat/webapps/ROOT/index.jsp
         - ./tomcat/webapps/LotteryWebApp_war.war:/usr/local/tomcat/webapps/LotteryWebApp_war.war
+        - ./tomcat/webapps/mysql-connector-java-8.0.21.jar:/usr/local/tomcat/lib/mysql-connector-java-8.0.21.jar
     links:
         - db

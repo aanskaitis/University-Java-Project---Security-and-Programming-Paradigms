@@ -1,14 +1,14 @@
-jQuery.validator.addMethod('phoneUK', function (value, element) {
+jQuery.validator.addMethod('phoneUK', function (value) {
     return /^\d{2}-\d{4}-\d{7}$/.test(value);
-})
+});
 
-jQuery.validator.addMethod('check_password', function (value, element) {
+jQuery.validator.addMethod('check_password', function (value) {
     return (/[A-Z]/.test(value) && /[a-z]/.test(value) && /[0-9]/.test(value));
-})
+});
 
-(function() {
+$(function() {
 
-    ("form[name='registration']").validate({
+    $("form[name='registration']").validate({
         rules: {
             firstname: "required",
             lastname: "required",
@@ -49,17 +49,4 @@ jQuery.validator.addMethod('check_password', function (value, element) {
             }
         }
     });
-
-    ("form[name='login']").validate({
-        rules: {
-            username: "required",
-            password: "required"
-        },
-
-        messages: {
-            username: "Please enter your username",
-            password: "Please provide a password"
-        }
-    });
-
 });
